@@ -1,0 +1,180 @@
+
+
+Sub Stocks_Loop()
+
+Dim ws As Worksheet
+Dim starting_ws As Worksheet
+Set starting_ws = ActiveSheet
+
+For Each ws In ThisWorkbook.Worksheets
+    ws.Activate
+ 
+    Dim RowValue As Double
+    RowValue = WorksheetFunction.CountA(Columns(1))
+
+     Dim TickerName As String
+     Dim TickerTotal As Double
+     Brand_Total = 0
+     Dim OpenPrice As Double
+ 
+     Dim ClosePrice
+
+     Dim Summary_Table_Row As Integer
+     Summary_Table_Row = 4
+
+    OpeningPrice = 0
+
+  For i = 2 To RowValue
+  
+            If OpeningPrice = 0 Then
+             OpeningPrice = Cells(i - 1, 3).Value
+             End If
+
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+        
+         TickerName = Cells(i, 1).Value
+         ClosePrice = Cells(i, 6).Value
+         TickerTotal = TickerTotal + Cells(i, 3).Value
+
+     
+    Range("M" & Summary_Table_Row).Value = TickerName
+    Range("N" & Summary_Table_Row).Value = TickerTotal
+    Range("O" & Summary_Table_Row).Value = OpeningPrice
+    Range("P" & Summary_Table_Row).Value = ClosePrice
+    Summary_Table_Row = Summary_Table_Row + 1
+    TickerTotal = 0
+      
+  ElseIf Cells(i - 1, 1).Value <> Cells(i, 1).Value Then
+        OpeningPrice = 0
+   Else
+      TickerTotal = TickerTotal + Cells(i, 3).Value
+         
+     End If
+
+   Next i
+ 
+ ws.Cells(1, 1) = 1 'this sets cell A1 of each sheet to "1"
+Next
+
+
+End Sub
+
+
+
+
+
+
+Sub Mathiness()
+Dim ws As Worksheet
+Dim starting_ws As Worksheet
+Set starting_ws = ActiveSheet
+
+For Each ws In ThisWorkbook.Worksheets
+    ws.Activate
+    
+    Dim RowValue2 As Double
+    RowValue2 = WorksheetFunction.CountA(Range("M4", Range("M4").End(xlDown)))
+    Dim Summary_Table_Row As Integer
+    Summary_Table_Row = 4
+ 
+For i = 4 To RowValue2
+
+
+    Dim Opener As Double
+    Opener = Cells(i, 15).Value
+ 
+    Dim Closer As Double
+    Closer = Cells(i, 16).Value
+    
+    Dim ChangePCT As Double
+    ChangePCT = (((Closer - Opener) / Opener) * 100)
+
+    Range("Q" & Summary_Table_Row).Value = ChangePCT
+    Summary_Table_Row = Summary_Table_Row + 1
+
+    On Error Resume Next
+
+
+    Next i
+
+ws.Cells(1, 1) = 1 'this sets cell A1 of each sheet to "1"
+Next
+
+
+End Sub
+
+
+
+  
+Sub WhereIsMax()
+
+Dim ws As Worksheet
+Dim starting_ws As Worksheet
+Set starting_ws = ActiveSheet
+
+For Each ws In ThisWorkbook.Worksheets
+    ws.Activate
+ 
+
+    Dim MaxHere As String
+    Dim MaxWinner As String
+    Dim MaxLoser As String
+   
+    Dim RowValue3 As Double
+    RowValue3 = WorksheetFunction.CountA(Range("N4", Range("N4").End(xlDown)))
+        Dim RowValue4 As Double
+        RowValue4 = WorksheetFunction.CountA(Range("Q4", Range("Q4").End(xlDown)))
+
+For i = 4 To RowValue3
+    If Cells(i, 14).Value > Cells(i + 1, 14).Value Then
+    MaxHere = Cells(i, 13).Value
+
+        Else
+            End If
+
+    Cells(16, 20).Value = MaxHere
+
+Next i
+    
+For i = 4 To RowValue4
+
+    If Cells(i, 17).Value > Cells(i + 1, 17).Value Then
+    MaxWinner = Cells(i, 13).Value
+    MaxWinnerVal = Cells(i, 17).Value
+ 
+        Else
+            End If
+            
+Cells(14, 20).Value = MaxWinner
+ 
+
+Next i
+
+
+For i = 4 To RowValue4
+
+    If Cells(i, 17).Value < Cells(i + 1, 17).Value Then
+    MaxLoser = Cells(i, 13).Value
+
+ 
+        Else
+            End If
+
+Cells(15, 20).Value = MaxLoser
+ 
+Next i
+
+
+lRow = Range("Q" & Rows.Count).End(xlUp).Row
+Set ColorRange = Range("CQ4:Q" & lRow)
+For Each cell In ColorRange
+If cell.Value > 0 Then cell.Interior.ColorIndex = 10
+If cell.Value < 0 Then cell.Interior.ColorIndex = 3
+    Next
+ws.Cells(1, 1) = 1
+Next
+End Sub
+
+
+
+
