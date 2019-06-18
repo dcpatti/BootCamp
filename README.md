@@ -1,2 +1,2 @@
 # BootCamp
-Patti Rodgers Homework for the GW Data Science boot camp
+Using VB to analyze Excel spreadsheets.
